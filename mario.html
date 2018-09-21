@@ -1,0 +1,106 @@
+<html>
+<head>
+    <META http-equiv="Content-Type" content="text/html; charset=x-sjis">
+    <title>マリオ</title>
+    <script language="javascript">
+
+    // 画像の表示座標・移動量
+    var w  = window.innerWidth;
+    var h  = window.innerHeight;
+    var x  = w / 2 ;  // 表示する座標
+    var pv =   10 ;  // 1回の移動量
+
+    // キーボードのフラグ // 1 : 押す  0 : 離す
+    var left  = 0 ;
+    var right = 0 ;
+    var space = 0 ;
+
+    // 画像切り替え用の配列
+    var img_right = new Array();
+    var img_left  = new Array();
+
+    for (i=0; i<=2; i=i+1) {
+        img_right[i] = new Image();
+        img_left[i] = new Image();
+
+        img_right[i].src = "images/mario_right_" + i + ".png";
+        img_left[i].src  = "images/mario_left_" + i + ".png";
+    }
+
+    var cnt = 0;
+
+    document.getElementById("mario_div").style.left = x;
+
+    // キーボードが押された時のイベント
+    function keydown(event) {
+        // 左
+        if(event.keyCode == 37) {
+            left = 1;
+        }
+        // 右
+        if(event.keyCode == 39) {
+            right = 1;
+        }
+
+        changeImg(event);
+        disp() ;
+    }
+
+    // キーボード入力を反映して表示座標を更新
+    function disp() {
+        // 左
+        if(left==1 && x >= 20) {
+             x = x - pv;
+        }
+        // 右
+        if(right==1 && x <= w + 20) {
+             x = x + pv;
+        }
+        document.getElementById("mario_div").style.left = x;
+    }
+
+    // キーボードが離された時のイベント
+    function keyup(event) {
+        // 左
+        if(event.keyCode == 37) {
+            left = 0;
+        }
+        // 右
+        if(event.keyCode == 39) {
+            right = 0;
+        }
+    }
+
+    // 画像を切り替える
+    function changeImg(event) {
+        if (cnt == 2) {
+            cnt = 0;
+        } else {
+            cnt++;
+        }
+
+        // 左
+        if (event.keyCode == 37) {
+            document.getElementById("mario_img").src=img_left[cnt].src;
+        }
+        // 右
+        if (event.keyCode == 39) {
+            document.getElementById("mario_img").src=img_right[cnt].src;
+        }
+    }
+
+    </script>
+</head>
+<body background="back.gif">
+    <div id="mario_div" style="POSITION:absolute;Z-INDEX:1;VISIBILITY:visible;">
+        <img id="mario_img" src="images/mario_right_0.png">
+    </div>
+    <script language="javascript">
+        document.getElementById("mario_div").style.left = x;
+        document.getElementById("mario_div").style.top  = h + 20;
+        document.onkeydown = keydown;
+        document.onkeyup   = keyup;
+    </script>
+</body>
+</html>
+
